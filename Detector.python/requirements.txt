@@ -1,0 +1,12 @@
+#
+#### requirements for python Camera Park ####
+#
+#### Requirements without versions ####
+opencv-python
+matplotlib
+configparser
+requests_futures
+#
+#### Requirements with version ####
+# example == 0.6.1	# minimum of 0.5.0
+#

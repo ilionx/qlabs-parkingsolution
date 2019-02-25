@@ -1,0 +1,38 @@
+[default]
+refresh_in_seconds = 1
+
+[camera]
+ip = 192.168.4.151
+port = 88
+username = admin
+password = ****
+url_suffix = videoMain
+fps = 20
+
+[backend]
+enabled = True
+url = https://...
+api_key = xxx
+notify_interval_seconds = 5
+
+[parking_lot]
+configured = True
+location = Race Art
+template_regions = 
+	577,614,16,13
+	790,612,16,15
+	685,434,13,12
+	389,237,14,14
+	764,33,9,11
+parking_spots = 
+	1,643,564,680,600,12,QNH
+	2,676,561,714,600,12,QNH
+	3,717,563,750,597,11,QNH
+	4,332,266,357,298,8,Voetbalveld
+	5,358,266,383,295,8,Voetbalveld
+	6,388,263,413,294,8,Voetbalveld
+	7,419,263,444,291,8,Voetbalveld
+	8,788,14,809,39,7,School
+	9,812,17,836,42,8,School
+	10,838,17,860,43,7,School
+
