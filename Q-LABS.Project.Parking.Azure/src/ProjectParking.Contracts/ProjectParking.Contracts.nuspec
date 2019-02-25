@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>ProjectParking.Contracts</id>
+    <version>$version$</version>
+    <title>ProjectParking.Contracts</title>
+    <authors>QNH</authors>
+    <owners>QNH</owners>
+    <iconUrl>http://static1.squarespace.com/static/52411028e4b0a50f16d13564/t/5265bb50e4b03d291eb96ff3/1448508467971/</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Contracts for ProjectParking</description>
+    <copyright>Copyright 2018</copyright>
+  </metadata>
+  <files>
+    <file src="..\ProjectParking.Contracts\**" exclude="**\*.pdb;**\*.xml;**\*.nuspec" target="lib/net461" />
+  </files>
+</package>

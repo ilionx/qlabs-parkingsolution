@@ -1,0 +1,13 @@
+{
+  "Spots": [
+    {
+      "Location": "Race Art",
+      "Available": true,
+      "MetaData": {
+        "carColor": "#58676d",
+        "longitude": "-28,8057",
+        "latitude": "65,1045"
+      }
+    }
+  ]
+}
