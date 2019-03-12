@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkingAppQLABS.Views.ParkingHomePage">
+    <ContentPage.Content>
+
+        <Grid>
+            <StackLayout>
+                <ListView x:Name="CarparksListView" ItemSelected="OnListItemSelected" HasUnevenRows="True" IsPullToRefreshEnabled="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                                    <StackLayout Orientation="Vertical">
+                                        <Label VerticalTextAlignment="Start" 
+                                               Text="{Binding value.name}" 
+                                               FontSize="24"/>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Available parking spots:"/>
+                                            <Label Text="{Binding value.availableParkingSpots}"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackLayout Padding="10,15" VerticalOptions="End">
+                    <Button Text="Start" x:Name="start" />
+                    <Button Text="Stop" x:Name="stop"/>
+                    <Label x:Name="infoLabel" FontSize="Large" Text="Current Status: Unknown"/>
+                </StackLayout>
+            </StackLayout>
+            <ContentView x:Name="LoadingIndicator" IsVisible="False" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                <ActivityIndicator Color="Gray" IsRunning="True" />
+            </ContentView>
+            <StackLayout VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand" Padding="15,10">
+                <Label x:Name="ErrorLabel"/>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

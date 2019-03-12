@@ -1,0 +1,34 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkingAppQLABS.Views.SettingsPage">
+    <ContentPage.Content>
+        <StackLayout Padding="15,10">
+            <Label Text="Raspberry IP:"/>
+            <Entry Placeholder="IP Address" x:Name="IpEntry"/>
+            <Label Text="Selected car:"/>
+            <Entry Placeholder="NFC id" x:Name="NfcEntry"/>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Debug Mode" VerticalOptions="Center"></Label>
+                <Switch x:Name="DebugSwitch" HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Test Mode" VerticalOptions="Center"></Label>
+                <Switch x:Name="TestSwitch" HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
+            <Entry Placeholder="Password" x:Name="PwEntry" VerticalOptions="EndAndExpand"/>
+
+            <!--<ListView x:Name="CarListView" Margin="0,10,0,0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="{Binding Name}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>-->
+            <Button VerticalOptions="End" Text="Save Changes" Clicked="OnClicked" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkingAppQLABS.Views.StartPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Image Source="Road.png" VerticalOptions="StartAndExpand"/>
+            <Label Text="Zoek een vrije parkeerplek voor je nieuwe leaseauto!"
+                   TextColor="White"
+                   FontSize="21"
+                   VerticalOptions="Center" 
+                   WidthRequest="300"
+                   HorizontalOptions="Center" 
+                   HorizontalTextAlignment="Center"/>
+
+            <Button BackgroundColor="#CC3399" Text="Start!" TextColor="White" WidthRequest="200" 
+                    CornerRadius="15"
+                    HorizontalOptions="Center"
+                    VerticalOptions="EndAndExpand"
+                    Margin="0,0,0,30"
+                    x:Name="StartButton"
+                    Clicked ="StartClicked"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

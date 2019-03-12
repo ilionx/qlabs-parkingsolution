@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkingAppQLABS.Views.AboutPage">
+    <ContentPage.Content>
+        <ScrollView>
+        <StackLayout Margin="15">
+            <Label x:Name="AboutHeaderLabel"/>
+            <Label x:Name="AboutBodyLabel"/>
+            <Label x:Name="AboutLinkLabel"/>
+            <Label x:Name="AboutFootLabel"/>
+        </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
