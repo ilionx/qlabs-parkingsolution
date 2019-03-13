@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkingAppQLABS.Views.OverviewPage">
+    <ContentPage.Content>
+        <Grid>
+            <StackLayout BackgroundColor="LightGray">
+                <ListView x:Name="CarparksListView" ItemSelected="OnListItemSelected" HasUnevenRows="True" VerticalOptions="StartAndExpand" HeightRequest="10000">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame CornerRadius="15"  
+                                       Padding="5"
+                                       Margin="10"
+                                       BackgroundColor="WhiteSmoke">
+                                    <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" >
+                                        <Frame CornerRadius="5"  
+                                               Padding="5"
+                                               Margin="10"
+                                               BackgroundColor="{Binding value.color}"
+                                               WidthRequest="80"
+                                               HeightRequest="80">
+                                            <Label Text="{Binding value.availableParkingSpots}" 
+                                                   HorizontalOptions="Center" VerticalOptions="Center" 
+                                                   FontFamily="Roboto" FontSize="60" TextColor="White"/>
+                                        </Frame>
+                                        <StackLayout VerticalOptions="Center">
+                                            <Label Text="{Binding value.name}"
+                                                   FontFamily="Roboto" FontSize="30" FontAttributes="Bold" TextColor="#867E95"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+            <StackLayout BackgroundColor="LightGray" HeightRequest="10000" x:Name="LoadingScreen">
+                <StackLayout VerticalOptions="CenterAndExpand">
+                    <Image x:Name="LoadingIndicator" Source="Range0" Margin="50,0,50,0"></Image>
+                    <Image Source="Qlogo.png" Margin="50,10,50,50"></Image>
+                    <!--<Label Text="Connecting to servers..." VerticalOptions="StartAndExpand"></Label>-->
+                </StackLayout>
+            </StackLayout>
+            <StackLayout VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand" Padding="15,10">
+                <Label x:Name="ErrorLabel"/>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
