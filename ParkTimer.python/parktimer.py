@@ -72,15 +72,12 @@ class SevenSegmentWidget(widget.Widget):
         value = float(value)
         self._display.print_float(value, decimal_digits=self._decimal_digits,
                                     justify_right=self._justify_right)
-        # self._display.set_fixed_decimal(value)
         self._display.write_display()
         
 
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
-
-#GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 IR_BREAK_START = 11
 GPIO.setup(IR_BREAK_START, GPIO.IN)
@@ -96,27 +93,16 @@ GPIO.setup(FLASH_LIGHT, GPIO.OUT)
 
 display = SevenSegmentWidget()
 
-# parktimer = Timer()
-# # parktimer.start()
-
 display.set_fixed_decimal(True)
 
 
 def start():
-    #display.set_value("3")
-    #time.sleep(1)
-    #display.set_value("2")
-    #time.sleep(1)
-    #display.set_value("1")
-    #time.sleep(1)
-
     parktimer = Timer()
     parktimer.start()
     
     LAST_LIGHT_STATUS = 0
 
     while True:
-        #button_state = GPIO.input(18)
         IR_BREAK_FLASH_INPUT = GPIO.input(IR_BREAK_FLASH)
         IR_BREAK_STOP_INPUT = GPIO.input(IR_BREAK_STOP)
         
@@ -138,9 +124,7 @@ def start():
 
 
 
-while True:
-    #button_state = GPIO.input(18)
-    
+while True:    
     IR_BREAK_START_INPUT = GPIO.input(IR_BREAK_START)
 
 
