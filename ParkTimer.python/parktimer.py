@@ -78,9 +78,21 @@ class SevenSegmentWidget(widget.Widget):
 
 
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 
-GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+#GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+IR_BREAK_START = 11
+GPIO.setup(IR_BREAK_START, GPIO.IN)
+
+IR_BREAK_FLASH = 13
+GPIO.setup(IR_BREAK_FLASH, GPIO.IN)
+
+IR_BREAK_STOP = 15
+GPIO.setup(IR_BREAK_STOP, GPIO.IN)
+
+FLASH_LIGHT = 40
+GPIO.setup(FLASH_LIGHT, GPIO.OUT)
 
 display = SevenSegmentWidget()
 
@@ -91,28 +103,46 @@ display.set_fixed_decimal(True)
 
 
 def start():
-    display.set_value("3")
-    time.sleep(1)
-    display.set_value("2")
-    time.sleep(1)
-    display.set_value("1")
-    time.sleep(1)
+    #display.set_value("3")
+    #time.sleep(1)
+    #display.set_value("2")
+    #time.sleep(1)
+    #display.set_value("1")
+    #time.sleep(1)
 
     parktimer = Timer()
     parktimer.start()
+    
+    LAST_LIGHT_STATUS = 0
 
     while True:
-        button_state = GPIO.input(18)
-        if(button_state != True):
-            display.set_value(parktimer.stop() + "")
-            time.sleep(0.2)
-            break
+        #button_state = GPIO.input(18)
+        IR_BREAK_FLASH_INPUT = GPIO.input(IR_BREAK_FLASH)
+        IR_BREAK_STOP_INPUT = GPIO.input(IR_BREAK_STOP)
+        
+        if(IR_BREAK_FLASH_INPUT == 0 and LAST_LIGHT_STATUS == 1):
+            GPIO.output(FLASH_LIGHT, GPIO.HIGH)
+            LAST_LIGHT_STATUS = 0
+        else:
+            if(LAST_LIGHT_STATUS == 0):
+                GPIO.output(FLASH_LIGHT, GPIO.LOW)
+                LAST_LIGHT_STATUS = 1
+            
+            
+        if(IR_BREAK_STOP_INPUT == 0):
+           display.set_value(parktimer.stop() + "")
+           time.sleep(0.2)
+           break
+        
         display.set_value(parktimer.elapsed() + "")
 
 
 
 while True:
-    button_state = GPIO.input(18)
+    #button_state = GPIO.input(18)
+    
+    IR_BREAK_START_INPUT = GPIO.input(IR_BREAK_START)
 
-    if(button_state != True):
+
+    if(IR_BREAK_START_INPUT == 0):
         start()
