@@ -1,4 +1,6 @@
 from Adafruit_LED_Backpack import AlphaNum4, BicolorBargraph24, SevenSegment
+from PIL import Image, ImageDraw, ImageFont
+import cups
 
 import RPi.GPIO as GPIO
 import widget
@@ -73,8 +75,6 @@ class SevenSegmentWidget(widget.Widget):
         self._display.print_float(value, decimal_digits=self._decimal_digits,
                                     justify_right=self._justify_right)
         self._display.write_display()
-        
-
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
@@ -94,6 +94,14 @@ GPIO.setup(FLASH_LIGHT, GPIO.OUT)
 display = SevenSegmentWidget()
 
 display.set_fixed_decimal(True)
+
+font_type = ImageFont.truetype("arial.ttf", 46)
+color = (0,0,0)
+
+conn = cups.Connection()
+printers = conn.getPrinters ()
+
+printer_name = "DYMO_LabelWriter_450"
 
 
 def start():
@@ -115,18 +123,35 @@ def start():
                 LAST_LIGHT_STATUS = 1
             
             
-        if(IR_BREAK_STOP_INPUT == 0):
-           display.set_value(parktimer.stop() + "")
-           time.sleep(0.2)
-           break
+        if(IR_BREAK_STOP_INPUT == 0):       
+            display.set_value(parktimer.stop() + "")
+            
+            timeElapsed = parktimer.elapsed()
+            
+            m = int(timeElapsed.split(".", 1)[0][1:3])
+            s = int(timeElapsed.split(".", 1)[0][3:])
+            ms = timeElapsed.split(".", 1)[1][:2]
+             
+            if (m > 0):
+                timeValue = "Too slow"
+            else:
+                timeValue = str(s) + ":" + str(ms)     
+            
+            image = Image.open("/home/pi/label.png")
+            draw = ImageDraw.Draw(image)
+
+            draw.text(xy=(815,141), text=timeValue, fill=color, font=font_type)
+
+            timeLabelPath = "/home/pi/timeLabel.png"
+            image.save(timeLabelPath, "PNG")
+            conn.printFile(printer_name, timeLabelPath, "Time label print", {})
+            time.sleep(0.2)
+            break
         
         display.set_value(parktimer.elapsed() + "")
 
-
-
 while True:    
     IR_BREAK_START_INPUT = GPIO.input(IR_BREAK_START)
-
 
     if(IR_BREAK_START_INPUT == 0):
         start()
