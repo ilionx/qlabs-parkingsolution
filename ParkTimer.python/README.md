@@ -108,6 +108,21 @@ Now you can plug the Dymo Labelwriter into a USB port on the Raspberry Pi and go
 
 Then click on add printer on the admin page and follow the steps on the page and after it is added you're done with the installation.
 
+#### Configuration
+
+You have to configure to things:
+
+- Label image
+- Printer name
+
+Change the path in the line of code in the Python script: `image = Image.open("/home/pi/label.png")`, so it will match your label.
+Next, change the x and y coordinates so the time is written at the place of your desire. You can test it with: `image.show()`.
+
+At last you have to change the variable `printer_name` with the name you configured the printer, in our case it is "DYMO_LabelWriter_450".
+
+Our label looks like this:
+![](../docs/images/label.png)
+
 #### Running
 
     $ python ./parktimer.py
