@@ -4,7 +4,7 @@ The parktimer is a python application specially created for racing purposes.
 
 To see this application in action click on the following Youtube link: [demonstration](https://youtu.be/7e_Cq-uBEMg).
 
-#### Game manual
+### Game manual
 
 The course is simpel, you have to drive through three gates.
 The first gate will start the timer, second gate will flash the xenon light and the last gate will stop the timer and print the label with the driven time on it.
@@ -13,11 +13,11 @@ Beneath is a picture of our stand at the TU in Eindhoven, three circles are plac
 
 ![](../docs/images/Parktimer_stand.jpeg)
 
-#### Wiring
+### Wiring
 
 ![](../docs/images/Parktimer_wiring.png)
 
-#### Requirements
+### Requirements
 
 - Raspberry Pi
 - Dymo Labelwriter 450
@@ -26,7 +26,7 @@ Beneath is a picture of our stand at the TU in Eindhoven, three circles are plac
 - Three 10K resistors ([information](https://www.adafruit.com/product/2784))
 - XENON REMOTED STROBE FLASH FLIGHT LIGHT ([information](https://alexnld.com/product/xenon-remoted-strobe-flash-flight-light-with-bright-led-navigation-lights-for-fpv-racing/?gclid=Cj0KCQiA5NPjBRDDARIsAM9X1GJSL8wIRPIScwYFA2MiGTdIRPDuz0uGO0BjQvmzhfD8X3ETlRSgHoAaAkU9EALw_wcB))
 
-#### Installation
+### Installation
 
     $ pip install -r requirements.txt
 
@@ -108,7 +108,7 @@ Now you can plug the Dymo Labelwriter into a USB port on the Raspberry Pi and go
 
 Then click on add printer on the admin page and follow the steps on the page and after it is added you're done with the installation.
 
-#### Configuration
+### Configuration
 
 You have to configure to things:
 
@@ -123,7 +123,7 @@ At last you have to change the variable `printer_name` with the name you configu
 Our label looks like this:
 ![](../docs/images/label.png)
 
-#### Running
+### Running
 
     $ python ./parktimer.py
 
