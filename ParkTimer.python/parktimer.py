@@ -1,9 +1,10 @@
 from Adafruit_LED_Backpack import AlphaNum4, BicolorBargraph24, SevenSegment
+import widget
+import RPi.GPIO as GPIO
+
 from PIL import Image, ImageDraw, ImageFont
 import cups
 
-import RPi.GPIO as GPIO
-import widget
 import datetime
 import time
 
@@ -92,15 +93,12 @@ FLASH_LIGHT = 40
 GPIO.setup(FLASH_LIGHT, GPIO.OUT)
 
 display = SevenSegmentWidget()
-
 display.set_fixed_decimal(True)
 
 font_type = ImageFont.truetype("arial.ttf", 46)
 color = (0,0,0)
 
 conn = cups.Connection()
-printers = conn.getPrinters ()
-
 printer_name = "DYMO_LabelWriter_450"
 
 

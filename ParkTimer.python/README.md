@@ -9,7 +9,7 @@ To see this application in action click on the following Youtube link: [demonstr
 The course is simpel, you have to drive through three gates.
 The first gate will start the timer, second gate will flash the xenon light and the last gate will stop the timer and print the label with the driven time on it.
 
-Beneath is a picture of our stand at the TU in Eindhoven, three circles are placed around the gates.
+Below is a picture of our stand at the TU in Eindhoven, three circles are placed around the gates.
 
 ![](../docs/images/Parktimer_stand.jpeg)
 
@@ -17,20 +17,127 @@ Beneath is a picture of our stand at the TU in Eindhoven, three circles are plac
 
 ![](../docs/images/Parktimer_wiring.png)
 
-### Requirements
+### How does it work?
+
+```
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+
+IR_BREAK_START = 11
+GPIO.setup(IR_BREAK_START, GPIO.IN)
+
+IR_BREAK_FLASH = 13
+GPIO.setup(IR_BREAK_FLASH, GPIO.IN)
+
+IR_BREAK_STOP = 15
+GPIO.setup(IR_BREAK_STOP, GPIO.IN)
+
+FLASH_LIGHT = 40
+GPIO.setup(FLASH_LIGHT, GPIO.OUT)
+```
+
+This piece of code is for setting up the GPIO pins. The IR-breaks are `GPIO.IN` because you want to read the input. The flashlight is `GPIO.OUT` because we want to trigger the flashlight. `11, 13, 15 and 40` are the pin numbers we used, these numbers correspond with `GPIO17, GPIO27, GPIO22 and GPIO21`.
+
+```
+display = SevenSegmentWidget()
+display.set_fixed_decimal(True)
+```
+
+We declare the display so we are able to write the time to it.
+
+```
+font_type = ImageFont.truetype("arial.ttf", 46)
+color = (0,0,0)
+```
+
+The font type we use to write the driven time on the label is Arial. And the color of that text is black.
+
+```
+conn = cups.Connection()
+printer_name = "DYMO_LabelWriter_450"
+```
+
+We make a connection with cups and declare the printer name so we can use it later on to print the label.
+
+```
+while True:
+    IR_BREAK_START_INPUT = GPIO.input(IR_BREAK_START)
+
+    if(IR_BREAK_START_INPUT == 0):
+        start()
+```
+
+The code starts here. It keeps reading the IR break input of the start gate untill the input is equal to `0`, if it reads `0` it will fire the method start(). The input is `1` when nothing interrupts the IR led.
+
+```
+while True:
+    IR_BREAK_FLASH_INPUT = GPIO.input(IR_BREAK_FLASH)
+    IR_BREAK_STOP_INPUT = GPIO.input(IR_BREAK_STOP)
+
+    if(IR_BREAK_FLASH_INPUT == 0):
+        GPIO.output(FLASH_LIGHT, GPIO.HIGH)
+    else:
+        GPIO.output(FLASH_LIGHT, GPIO.LOW)
+```
+
+In the start method is a while True loop where we read the input of the IR Break of the flashlight and the stop gate. First we check if the flashlight gate is interrupted, when it is interrupted we send a `GPIO.HIGH` to the flashlight, which will flash the flashlight. When it isn't interrupted we send `GPIO.LOW` to the flaslight to turn it off.
+
+```
+display.set_value(parktimer.elapsed() + "")
+```
+
+The elapsed time will be written to the display
+
+```
+if(IR_BREAK_STOP_INPUT == 0):
+    display.set_value(parktimer.stop() + "")
+
+    timeElapsed = parktimer.elapsed()
+
+    m = int(timeElapsed.split(".", 1)[0][1:3])
+    s = int(timeElapsed.split(".", 1)[0][3:])
+    ms = timeElapsed.split(".", 1)[1][:2]
+
+    if (m > 0):
+        timeValue = "Too slow"
+    else:
+        timeValue = str(s) + ":" + str(ms)
+
+    image = Image.open("/home/pi/label.png")
+    draw = ImageDraw.Draw(image)
+
+    draw.text(xy=(815,141), text=timeValue, fill=color, font=font_type)
+
+    timeLabelPath = "/home/pi/timeLabel.png"
+    image.save(timeLabelPath, "PNG")
+    conn.printFile(printer_name, timeLabelPath, "Time label print", {})
+    time.sleep(0.2)
+    break
+```
+
+Next we check if the IR break of the stop gate is interrupted. If so, we stop the timer and declare the minutes, seconds and milliseconds from the elapsed time. When it took longer than a minute, the timeValue is `Too slow`, otherwise the driven time will be the timeValue looking like `s:ms`. Next we open the image and declare a draw variable so we can 'draw' text on it with the method `draw.text()`. We used the following parameters:
+
+- `xy` are the coordinates where we draw the text on the label.
+- `text` is the text we will draw onto the label.
+- `fill` is the color of the text
+- `font` which is the font-type of the text.
+
+Then we save the image we drew the text on and print that image. We break out the while loop and return to checking the start gate so we can start again.
+
+### Hardware requirements
 
 - Raspberry Pi
 - Dymo Labelwriter 450
 - 1.2" 7-segment LED HT16K33 Backpack ([information](https://www.adafruit.com/product/1270))
 - Three IR Break Beam Sensors ([information](https://www.adafruit.com/product/2168))
 - Three 10K resistors ([information](https://www.adafruit.com/product/2784))
-- XENON REMOTED STROBE FLASH FLIGHT LIGHT ([information](https://alexnld.com/product/xenon-remoted-strobe-flash-flight-light-with-bright-led-navigation-lights-for-fpv-racing/?gclid=Cj0KCQiA5NPjBRDDARIsAM9X1GJSL8wIRPIScwYFA2MiGTdIRPDuz0uGO0BjQvmzhfD8X3ETlRSgHoAaAkU9EALw_wcB))
+- Xenon Remoted Strobe Flash Fligh Light ([information](https://alexnld.com/product/xenon-remoted-strobe-flash-flight-light-with-bright-led-navigation-lights-for-fpv-racing/?gclid=Cj0KCQiA5NPjBRDDARIsAM9X1GJSL8wIRPIScwYFA2MiGTdIRPDuz0uGO0BjQvmzhfD8X3ETlRSgHoAaAkU9EALw_wcB))
 
 ### Installation
 
     $ pip install -r requirements.txt
 
-This command installs the Adafruit-LED-Backpack libraray needed for the 1.2" 7-segment LED HT16K33 Backpack.
+This command installs the Adafruit-LED-Backpack library needed for the 1.2" 7-segment LED HT16K33 Backpack.
 
 Next we need to install CUPS (Common Unix Printing System) so we can use the Dymo Labelwriter as a printer on the Raspberry Pi.
 
@@ -38,7 +145,7 @@ Next we need to install CUPS (Common Unix Printing System) so we can use the Dym
     $ sudo apt-get install cups
     $ sudo usermod -a -G lpadmin pi
 
-If you want remote access than you'll need to make a few changes in the config file, to do so run the command:
+If you want remote access you'll have to make a few changes in the config file, to do so run the command:
 
     $ sudo nano /etc/cups/cupsd.conf
 
