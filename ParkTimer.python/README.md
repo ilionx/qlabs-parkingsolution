@@ -67,7 +67,7 @@ while True:
         start()
 ```
 
-The code starts here. It keeps reading the `IR_BREAK_START_INPUT` of the start gate untill the input is equal to `0`, if it reads `0` it will fire the method start(). The input is `1` when nothing interrupts the IR led.
+The code starts here. It keeps reading the `IR_BREAK_START_INPUT` of the start gate untill the input is equal to `0`, if it reads `0` it will fire the method start(). The input is `1` when nothing interrupts the IR Break.
 
 ```
 while True:
