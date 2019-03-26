@@ -67,7 +67,7 @@ while True:
         start()
 ```
 
-The code starts here. It keeps reading the IR break input of the start gate untill the input is equal to `0`, if it reads `0` it will fire the method start(). The input is `1` when nothing interrupts the IR led.
+The code starts here. It keeps reading the `IR_BREAK_START_INPUT` of the start gate untill the input is equal to `0`, if it reads `0` it will fire the method start(). The input is `1` when nothing interrupts the IR led.
 
 ```
 while True:
@@ -80,7 +80,7 @@ while True:
         GPIO.output(FLASH_LIGHT, GPIO.LOW)
 ```
 
-In the start method is a while True loop where we read the input of the IR Break of the flashlight and the stop gate. First we check if the flashlight gate is interrupted, when it is interrupted we send a `GPIO.HIGH` to the flashlight, which will flash the flashlight. When it isn't interrupted we send `GPIO.LOW` to the flaslight to turn it off.
+In the start method is a while loop where we read the input of the IR Break of the flashlight gate and the stop gate. First we check if the flashlight gate is interrupted, when it is interrupted we send a `GPIO.HIGH` to the flashlight, which will flash the flashlight. When it isn't interrupted we send `GPIO.LOW` to the flaslight to turn it off.
 
 ```
 display.set_value(parktimer.elapsed() + "")
@@ -115,7 +115,7 @@ if(IR_BREAK_STOP_INPUT == 0):
     break
 ```
 
-Next we check if the IR break of the stop gate is interrupted. If so, we stop the timer and declare the minutes, seconds and milliseconds from the elapsed time. When it took longer than a minute, the timeValue is `Too slow`, otherwise the driven time will be the timeValue looking like `s:ms`. Next we open the image and declare a draw variable so we can 'draw' text on it with the method `draw.text()`. We used the following parameters:
+Next we check if the IR break of the stop gate is interrupted. If so, we stop the timer and declare the minutes, seconds and milliseconds from the elapsed time. When it took longer than a minute, the timeValue is `Too slow`, otherwise the driven time will be the timeValue which looks like `s:ms`. Next we open the image and declare a draw variable so we can 'draw' text on it with the method `draw.text()`. We used the following parameters:
 
 - `xy` are the coordinates where we draw the text on the label.
 - `text` is the text we will draw onto the label.
