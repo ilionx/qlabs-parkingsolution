@@ -1,7 +1,10 @@
 from Adafruit_LED_Backpack import AlphaNum4, BicolorBargraph24, SevenSegment
-
-import RPi.GPIO as GPIO
 import widget
+import RPi.GPIO as GPIO
+
+from PIL import Image, ImageDraw, ImageFont
+import cups
+
 import datetime
 import time
 
@@ -72,47 +75,81 @@ class SevenSegmentWidget(widget.Widget):
         value = float(value)
         self._display.print_float(value, decimal_digits=self._decimal_digits,
                                     justify_right=self._justify_right)
-        # self._display.set_fixed_decimal(value)
         self._display.write_display()
-        
-
 
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 
-GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+IR_BREAK_START = 11
+GPIO.setup(IR_BREAK_START, GPIO.IN)
+
+IR_BREAK_FLASH = 13
+GPIO.setup(IR_BREAK_FLASH, GPIO.IN)
+
+IR_BREAK_STOP = 15
+GPIO.setup(IR_BREAK_STOP, GPIO.IN)
+
+FLASH_LIGHT = 40
+GPIO.setup(FLASH_LIGHT, GPIO.OUT)
 
 display = SevenSegmentWidget()
-
-# parktimer = Timer()
-# # parktimer.start()
-
 display.set_fixed_decimal(True)
+
+font_type = ImageFont.truetype("arial.ttf", 46)
+color = (0,0,0)
+
+conn = cups.Connection()
+printer_name = "DYMO_LabelWriter_450"
 
 
 def start():
-    display.set_value("3")
-    time.sleep(1)
-    display.set_value("2")
-    time.sleep(1)
-    display.set_value("1")
-    time.sleep(1)
-
     parktimer = Timer()
     parktimer.start()
+    
+    LAST_LIGHT_STATUS = 0
 
     while True:
-        button_state = GPIO.input(18)
-        if(button_state != True):
+        IR_BREAK_FLASH_INPUT = GPIO.input(IR_BREAK_FLASH)
+        IR_BREAK_STOP_INPUT = GPIO.input(IR_BREAK_STOP)
+        
+        if(IR_BREAK_FLASH_INPUT == 0 and LAST_LIGHT_STATUS == 1):
+            GPIO.output(FLASH_LIGHT, GPIO.HIGH)
+            LAST_LIGHT_STATUS = 0
+        else:
+            if(LAST_LIGHT_STATUS == 0):
+                GPIO.output(FLASH_LIGHT, GPIO.LOW)
+                LAST_LIGHT_STATUS = 1
+            
+            
+        if(IR_BREAK_STOP_INPUT == 0):       
             display.set_value(parktimer.stop() + "")
+            
+            timeElapsed = parktimer.elapsed()
+            
+            m = int(timeElapsed.split(".", 1)[0][1:3])
+            s = int(timeElapsed.split(".", 1)[0][3:])
+            ms = timeElapsed.split(".", 1)[1][:2]
+             
+            if (m > 0):
+                timeValue = "Too slow"
+            else:
+                timeValue = str(s) + ":" + str(ms)     
+            
+            image = Image.open("/home/pi/label.png")
+            draw = ImageDraw.Draw(image)
+
+            draw.text(xy=(815,141), text=timeValue, fill=color, font=font_type)
+
+            timeLabelPath = "/home/pi/timeLabel.png"
+            image.save(timeLabelPath, "PNG")
+            conn.printFile(printer_name, timeLabelPath, "Time label print", {})
             time.sleep(0.2)
             break
+        
         display.set_value(parktimer.elapsed() + "")
 
+while True:    
+    IR_BREAK_START_INPUT = GPIO.input(IR_BREAK_START)
 
-
-while True:
-    button_state = GPIO.input(18)
-
-    if(button_state != True):
+    if(IR_BREAK_START_INPUT == 0):
         start()
